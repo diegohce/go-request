@@ -93,6 +93,8 @@ func (rb *RequestBuilder) Build() (*http.Request, error) {
 	if rb.method == "" {
 		rb.method = "GET"
 	}
-	rb.url.RawQuery = rb.queryStr.Encode()
+	if rb.queryStr != nil {
+		rb.url.RawQuery = rb.queryStr.Encode()
+	}
 	return http.NewRequest(rb.method, rb.url.String(), rb.payload)
 }

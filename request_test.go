@@ -130,3 +130,17 @@ func TestWithoutBody(t *testing.T) {
 		t.Fatal("Body error. Got:", string(b), "Want: CENA")
 	}
 }
+
+func TestMinimalBuild(t *testing.T) {
+
+	rb := &RequestBuilder{}
+
+	req, err := rb.Host("localhost").Build()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if req.URL.String() != "http://localhost" {
+		t.Fatal("Got:", req.URL.String(), "Want: http://localhost")
+	}
+}
