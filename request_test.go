@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"strings"
 	"testing"
 )
 
@@ -142,5 +143,42 @@ func TestMinimalBuild(t *testing.T) {
 
 	if req.URL.String() != "http://localhost" {
 		t.Fatal("Got:", req.URL.String(), "Want: http://localhost")
+	}
+}
+
+func TestHeaders(t *testing.T) {
+
+	rb := &RequestBuilder{}
+
+	req, err := rb.Host("localhost").
+		SetHeader("X-My-Header", "HI").
+		AddHeader("Accept", "application/json").
+		Build()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if req.Header.Get("Accept") != "application/json" {
+		t.Fatal("Got:", req.Header.Get("Accept"), "Want: application/json")
+	}
+
+	if req.Header.Get("X-My-Header") != "HI" {
+		t.Fatal("Got:", req.Header.Get("X-My-Header"), "Want: HI")
+	}
+}
+
+func TestAddHeader(t *testing.T) {
+
+	rb := &RequestBuilder{}
+
+	req, err := rb.AddHeader("Accept", "A").
+		AddHeader("Accept", "B").
+		Build()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if strings.Join(req.Header["Accept"], ",") != "A,B" {
+		t.Fatal("Got:", strings.Join(req.Header["Accept"], ","), "Want: A,B")
 	}
 }

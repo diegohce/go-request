@@ -85,6 +85,25 @@ func (rb *RequestBuilder) Values() string {
 	return rb.queryStr.Encode()
 }
 
+// SetHeader sets a http header. If header exists, it is replaced.
+func (rb *RequestBuilder) SetHeader(key, value string) *RequestBuilder {
+	if rb.headers == nil {
+		rb.headers = make(http.Header)
+	}
+	rb.headers.Set(key, value)
+	return rb
+}
+
+// AddHeader adds a value to an existing header.
+// It will append the new value to an existing header.
+func (rb *RequestBuilder) AddHeader(key, value string) *RequestBuilder {
+	if rb.headers == nil {
+		rb.headers = make(http.Header)
+	}
+	rb.headers.Add(key, value)
+	return rb
+}
+
 // Build creates a *http.Request object using the collected settings from RequestBuilder.
 func (rb *RequestBuilder) Build() (*http.Request, error) {
 	if rb.url.Scheme == "" {
@@ -96,5 +115,11 @@ func (rb *RequestBuilder) Build() (*http.Request, error) {
 	if rb.queryStr != nil {
 		rb.url.RawQuery = rb.queryStr.Encode()
 	}
-	return http.NewRequest(rb.method, rb.url.String(), rb.payload)
+
+	req, err := http.NewRequest(rb.method, rb.url.String(), rb.payload)
+	if err == nil && rb.headers != nil {
+		req.Header = rb.headers
+	}
+	return req, err
+	//return http.NewRequest(rb.method, rb.url.String(), rb.payload)
 }
