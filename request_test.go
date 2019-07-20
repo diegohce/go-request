@@ -88,7 +88,7 @@ func TestWithoutBody(t *testing.T) {
 
 	rb := &RequestBuilder{}
 
-	req, err := rb.Method("GET").
+	_, err := rb.Method("GET").
 		UserPassword("diego", "dirtysecret").
 		Scheme("").
 		Host(u.Host).URL("/test").
@@ -100,7 +100,6 @@ func TestWithoutBody(t *testing.T) {
 		Build()
 
 	if err != nil {
-		t.Logf("%+v\n", req)
 		t.Fatal(err)
 	}
 
@@ -109,9 +108,7 @@ func TestWithoutBody(t *testing.T) {
 		t.Fatal("Query string failed. Got:", qstring, "Want: name=diego&pet=simona&pet=lola")
 	}
 
-	c := &http.Client{}
-
-	res, err := c.Do(req)
+	res, err := rb.Do()
 	if err != nil {
 		t.Fatal(err)
 	}

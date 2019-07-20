@@ -123,3 +123,15 @@ func (rb *RequestBuilder) Build() (*http.Request, error) {
 	return req, err
 	//return http.NewRequest(rb.method, rb.url.String(), rb.payload)
 }
+
+// Do performs the request returned by Build.
+func (rb *RequestBuilder) Do() (*http.Response, error) {
+
+	req, err := rb.Build()
+	if err != nil {
+		return nil, err
+	}
+
+	c := &http.Client{}
+	return c.Do(req)
+}
