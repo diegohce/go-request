@@ -7,7 +7,7 @@ import (
 	"net/url"
 )
 
-// RequestBuilder
+// RequestBuilder struct for request builder pattern.
 type RequestBuilder struct {
 	method   string
 	url      url.URL
@@ -72,6 +72,7 @@ func (rb *RequestBuilder) SetValue(key, value string) *RequestBuilder {
 	return rb
 }
 
+// DelValue removes key and all its values from querystring.
 func (rb *RequestBuilder) DelValue(key string) *RequestBuilder {
 	if rb.queryStr != nil {
 		rb.queryStr.Del(key)
