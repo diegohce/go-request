@@ -179,3 +179,13 @@ func TestAddHeader(t *testing.T) {
 		t.Fatal("Got:", strings.Join(req.Header["Accept"], ","), "Want: A,B")
 	}
 }
+
+func TestBuildErrorOnDo(t *testing.T) {
+
+	rb := &RequestBuilder{}
+
+	_, err := rb.Method(",").Do()
+	if err == nil {
+		t.Fatal("No error. Want: Build() error")
+	}
+}
