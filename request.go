@@ -1,7 +1,6 @@
 package request
 
 import (
-	"bytes"
 	"io"
 	"net/http"
 	"net/url"
@@ -48,8 +47,8 @@ func (rb *RequestBuilder) UserPassword(user, password string) *RequestBuilder {
 }
 
 // Payload sets the request body.
-func (rb *RequestBuilder) Payload(payload []byte) *RequestBuilder {
-	rb.payload = bytes.NewReader(payload)
+func (rb *RequestBuilder) Payload(payload io.Reader) *RequestBuilder {
+	rb.payload = payload
 	return rb
 }
 

@@ -1,6 +1,7 @@
 package request
 
 import (
+	"bytes"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -42,7 +43,7 @@ func TestWithBody(t *testing.T) {
 		AddValue("pet", "lola").
 		AddValue("pet2", "frida").
 		DelValue("pet2").
-		Payload([]byte("DIEGO")).
+		Payload(bytes.NewReader([]byte("DIEGO"))).
 		Build()
 
 	if err != nil {
